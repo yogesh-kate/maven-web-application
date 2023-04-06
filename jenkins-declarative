@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    tools{
+     maven "maven 3.9.1"
+    }
+
+    stages {
+        //Get the code from Github Repo
+        stage('Checkoutcode') {
+            steps {
+        git credentialsId: '541cf2d8-8b31-477c-9cb2-b61fa8e93982', url: 'https://github.com/yogesh-kate/maven-web-application.git'
+        }
+        }
+        //Do the build
+        stage('DO BUILD'){
+            steps {
+                sh "mvn clean package"
+            }
+        }
+        //Do the sonarqube report
+		stage('execute report'){
+		steps{
+          sh "mvn sonar:sonar"
+            }
+        }
+         //Upload Artifact into Artifactory repo
+       stage('upload into artifact'){
+	steps{
+       sh "mvn deploy"
+    }
+    }
+    //Deploy app into Tomcat server
+stage('DeployAppIntoTomcat'){
+steps{   
+sshagent(['96e9723c-392c-47d2-837e-a065e4f88611']) {
+   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.133.46:/opt/apache-tomcat-9.0.73/webapps"
+}
+}
+}
+}//Stages Closing
+}//pipeline Closing
