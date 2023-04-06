@@ -4,7 +4,7 @@ echo "The node name is : ${env.NODE_NAME}"
 echo "The job name is : ${env.JOB_NAME}"
 echo "The build number is :${env.BUILD_NUMBER}"
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))])
-
+*/
 //Checkout stage
 stage('Checkoutcode'){
 git credentialsId: '50e98866-8d76-4939-a939-11b691b3f60b', url: 
@@ -25,11 +25,11 @@ sh "$mavenHome/bin/mvn sonar:sonar"
 stage('Upload Artifact into nexus'){
 sh "$mavenHome/bin/mvn deploy"
 }
-
+/*
 //Deploy app into Tomcat server
 stage('DeployAppIntoTomcat'){
-sshagent(credentials: ['96e9723c-392c-47d2-837e-a065e4f88611'], ignoreMissing: true) {
-   sh "scp-o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.133.46:/opt/apache-tomcat-9.0.73/webapps"
+sshagent(credentials: ['96e9723c-392c-47d2-837e-a065e4f88611']) {
+   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.133.46:/opt/apache-tomcat-9.0.73/webapps"
 }
 }
 }//Node Closing
