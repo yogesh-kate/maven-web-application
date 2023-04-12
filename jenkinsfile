@@ -29,7 +29,7 @@ sh "$mavenHome/bin/mvn deploy"
 //Deploy app into Tomcat server
 stage('DeployAppIntoTomcat'){
 sshagent(['bc995ac5-7186-4cc2-b78b-086d3d873771']) {
-   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.133.46:/opt/apache-tomcat-9.0.73/webapps"
+   sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.6.92.233:/opt/apache-tomcat-9.0.73/webapps"
 }
 }
 }//Node Closing
